@@ -1,0 +1,30 @@
+[
+ {
+  "directory": "/Users/viktorhollanders/Developer/uni/message_client",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-std=c++11",
+   "-Iinclude",
+   "-c",
+   "src/server.cpp",
+   "-o",
+   "obj/server.o"
+  ],
+  "file": "src/server.cpp"
+ },
+ {
+  "directory": "/Users/viktorhollanders/Developer/uni/message_client",
+  "arguments": [
+   "g++",
+   "-Wall",
+   "-std=c++11",
+   "-Iinclude",
+   "-c",
+   "src/client.cpp",
+   "-o",
+   "obj/client.o"
+  ],
+  "file": "src/client.cpp"
+ }
+]

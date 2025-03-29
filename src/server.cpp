@@ -32,6 +32,7 @@ private:
 
             wait_for_request();
           } else {
+                std::cout << "run when client leavs" << std::endl;
             std::cout << "error: " << ec.message() << std::endl;
           }
         });
@@ -80,7 +81,6 @@ int main(int argc, char *argv[]) {
 
     io_context.run();
   } catch (std::exception &e) {
-    // std::cout << "run when client leavs" << std::endl;
     std::cerr << "Exception: " << e.what() << std::endl;
   }
   return 0;

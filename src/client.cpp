@@ -7,8 +7,13 @@
 #include <string>
 #include <system_error>
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
   try {
+
+    if (argc != 3) {
+      std::cerr << "Usage: chat_client <host> <port>\n";
+      return 1;
+    }
 
     asio::io_context io_context;
 
@@ -16,7 +21,7 @@ int main(int argc, char **argv) {
     asio::ip::tcp::resolver resolver(io_context);
 
     // contect to the server
-    asio::connect(socket, resolver.resolve("127.0.0.1", "25000"));
+    asio::connect(socket, resolver.resolve(argv[1], argv[2]));
 
     // send some data
     std::string data{};

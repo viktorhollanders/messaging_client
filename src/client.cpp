@@ -7,6 +7,13 @@
 #include <string>
 #include <system_error>
 
+void create_user(std::string &username) {
+    while(username.empty()) {
+        std::cout << "Enter a user name: ";
+        getline(std::cin, username);
+    }
+}
+
 int main(int argc, char *argv[]) {
   try {
 
@@ -23,15 +30,20 @@ int main(int argc, char *argv[]) {
     // contect to the server
     asio::connect(socket, resolver.resolve(argv[1], argv[2]));
 
+    // Create user name
+    std::string username;
+    create_user(username);
+
     // send some data
     std::string data{};
     std::cout << "enter your message: ";
     std::getline(std::cin, data);
 
     while (data != "quit") {
-      auto result = asio::write(socket, asio::buffer(data + "\n"));
+        auto format_message = username + ": " + data + "\n";
+      auto result = asio::write(socket, asio::buffer(format_message));
 
-      std::cout << "data sent: " << data.length() << '/' << result << std::endl;
+      std::cout << "data sent: " << format_message.length() << '/' << result << std::endl;
       std::cout << std::endl;
 
       std::cout << "enter your message: ";

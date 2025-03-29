@@ -22,7 +22,7 @@ private:
     auto self(shared_from_this());
     std::cout << "Waiting..." << std::endl;
     asio::async_read_until(
-        m_socket, m_buffer, "\0",
+        m_socket, m_buffer, "\n",
         [this, self](std::error_code ec, std::size_t) {
           if (!ec) {
 
@@ -44,8 +44,9 @@ private:
 
 class server {
 public:
-  server(asio::io_context &io_context, short port)
-      : m_acceptor(io_context, tcp::endpoint(tcp::v4(), port)) {
+  server(asio::io_context& io_context,
+      const tcp::endpoint& endpoint)
+      : m_acceptor(io_context, endpoint) {
     do_accept();
   }
 
@@ -64,11 +65,22 @@ private:
 
 int main(int argc, char *argv[]) {
   try {
+
+      if (argc < 2)
+      {
+        std::cerr << "Usage: server <port> \n";
+        return 1;
+      }
+
     std::cout << "Server started!!!" << std::endl;
     asio::io_context io_context;
-    server message_server(io_context, 25000);
+
+    asio::ip::tcp::endpoint endpoint(asio::ip::tcp::v4(), std::atoi(argv[1]));
+    server message_server(io_context, endpoint);
+
     io_context.run();
   } catch (std::exception &e) {
+    // std::cout << "run when client leavs" << std::endl;
     std::cerr << "Exception: " << e.what() << std::endl;
   }
   return 0;

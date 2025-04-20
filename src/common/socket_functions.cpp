@@ -7,7 +7,7 @@
 #include <iostream>
 #include <unistd.h>
 
-// client and server methods
+// server and client
 
 // Creates a socket address
 // If no ip_address is passed in it is set to and empty string
@@ -39,7 +39,7 @@ socket_t create_socket(sockaddr *address) {
 };
 
 // Closes a conection
-int close_conection(socket_t socketfd) {
+int close_connection(socket_t socketfd) {
 
     #ifdef _WIN32
         // Windows-specific socket closing
@@ -59,7 +59,7 @@ int close_conection(socket_t socketfd) {
 };
 
 
-// Server methods
+// Server
 
 // Binds a socket
 bool bind_socket(socket_t &socketfd, const sockaddr *address, socklen_t socket_len) {
@@ -91,7 +91,7 @@ int accept_connection(socket_t socketfd, struct sockaddr *client_addr, socklen_t
 
     return client_socket;
 };
-// client methods
+// client
 
 // Connects to a server
 bool connect_to_server(socket_t socketfd, const sockaddr *address, socklen_t socket_len) {

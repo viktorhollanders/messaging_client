@@ -38,6 +38,27 @@ socket_t create_socket(sockaddr *address) {
     return socketfd;
 };
 
+// Closes a conection
+int close_conection(socket_t socketfd) {
+
+    #ifdef _WIN32
+        // Windows-specific socket closing
+        if (closesocket(socketfd) != 0) {
+            std::cerr << "Error closing socket: " << GET_SOCKET_ERROR << std::endl;
+            return -1;
+        }
+    #else
+        // UNIX/Linux/macOS socket closing
+        if (close(socketfd) < 0) {
+            std::cerr << "Error closing socket: " << strerror(errno) << std::endl;
+            return -1;
+        }
+    #endif
+
+    return 0;
+};
+
+
 // Server methods
 
 // Binds a socket
@@ -70,20 +91,7 @@ int accept_connection(socket_t socketfd, struct sockaddr *client_addr, socklen_t
 
     return client_socket;
 };
-
-// Connects to a server
-int close_conection(socket_t socketfd) {
-
-    if (close(socketfd) < 0) {
-        std::cerr << "Error closing socket: " << strerror(errno) << std::endl;
-        return -1;
-    };
-
-    return 0;
-};
-
 // client methods
-
 
 // Connects to a server
 bool connect_to_server(socket_t socketfd, const sockaddr *address, socklen_t socket_len) {

@@ -10,3 +10,9 @@ bool check_os(){
     #endif
     return true;
 }
+
+void cleanup_sockets() {
+    #ifdef ON_WINDOWS
+        WSACleanup();
+    #endif
+}

@@ -10,7 +10,7 @@ BIN     := bin
 EXECUTABLE := $(BIN)/main
 
 .PHONY : all client server clean
-	
+
 all: client server
 
 
@@ -18,13 +18,16 @@ $(OBJECTS)/%.o: $(SRC)/%.cpp
 	@echo "Compiling $< ..."
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
+$(OBJECTS)/%.o: $(SRC)/common/%.cpp
+	@echo "Compiling $< ..."
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
 # link
-client: $(OBJECTS)/client.o
+client: $(OBJECTS)/client.o $(OBJECTS)/socket_functions.o
 	@echo "🔧 Building client..."
 	$(CXX) $(CXXFLAGS) $^ -o $(BIN)/client
 
-server: $(OBJECTS)/server.o
+server: $(OBJECTS)/server.o $(OBJECTS)/socket_functions.o
 	@echo "🔧 Building server..."
 	$(CXX) $(CXXFLAGS) $^ -o $(BIN)/server
 

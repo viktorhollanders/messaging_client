@@ -15,12 +15,25 @@ int main(int argc, char *argv[]) {
 
     socket_address_in_t address = create_socket_address(port, ip);
     socket_t serverfd = create_socket((socket_address_t *) &address);
-    bind_socket(serverfd, (socket_address_t *) &address, sizeof(address));
+    address_size_t addSize =  sizeof(address);
+    bind_socket(serverfd, (socket_address_t *) &address, addSize);
 
     if (!listen_for_connection(serverfd)) {
         std::cout << "connection failed" << std::endl;
     }
-    std::cout << "Listening!!" << std::endl;
+
+
+    std::cout << "Server listening on: " << ip << " port: " << port  << std::endl;
+    socket_t server_socket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
+
+    while(true) {
+        if (server_socket < 0) {
+        std::cout << "Return error to client" << "\n";
+
+        }
+
+        std::cout << "Acepting conections " << "\n";
+    }
 
 
     return 0;

@@ -39,7 +39,7 @@ int send_message_size(socket_t socketfd, int message_size) {
         std::cout << "Error sending message size: " << GET_SOCKET_ERROR << std::endl;
         return -1;
     }
-    return 0;
+    return resault;
 };
 
 // Receives the size of the message
@@ -47,7 +47,7 @@ int receive_message_size(socket_t socketfd) {
     int size_net_order;
     int bytes_recived = recv(socketfd,  &size_net_order, sizeof(size_net_order), 0);
 
-    if (bytes_recived != size_net_order) {
+    if (bytes_recived != sizeof(size_net_order)) {
         std::cerr << "Error receiving message size: " << GET_SOCKET_ERROR << std::endl;
         return -1;
     }
@@ -60,11 +60,11 @@ int send_message(socket_t socketfd, std::vector<char> message) {
     int result = send(socketfd, message.data(), message.size(), 0);
 
     if (result < 0) {
-        std::cout << "Error sending message" << GET_SOCKET_ERROR << std::endl;
+        std::cout << "Error sending message: " << GET_SOCKET_ERROR << std::endl;
         return -1;
     }
 
-    return 0;
+    return result;
 };
 
 // Recieves the message

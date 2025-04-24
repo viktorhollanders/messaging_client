@@ -3,11 +3,17 @@
 
 #include "check_os.h"
 #include <string>
+#include <vector>
 
 // server and client
 socket_address_in_t create_socket_address(int port,  std::string ip_address = "");
 socket_t create_socket(socket_address_t *address);
 int close_connection(socket_t socketfd);
+void send_message_size(socket_t socketfd, int message_size);
+int receive_message_size(socket_t socketfd);
+
+void send_message(socket_t socketfd, std::vector<char> message);
+int receive_message(socket_t socketfd, std::vector<char> message, int message_size);
 
 // server
 bool bind_socket(socket_t socketfd, const socket_address_t *address, address_size_t socket_len);

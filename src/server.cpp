@@ -30,9 +30,11 @@ int main(int argc, char *argv[]) {
         if (server_socket < 0) {
         std::cout << "Return error to client" << "\n";
 
-        }
+        } else {
 
         std::cout << "Acepting conections " << "\n";
+        }
+
     }
 
 

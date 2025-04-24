@@ -17,11 +17,15 @@ int main(int argc, char *argv[]) {
 
     connect_to_server(clientfd, (socket_address_t *) &address, addSize);
 
-    std::vector<char> message;
+    std::string message;
     std::cout << "Enter your message: ";
 
+    while(message != "quit") {
+
+    }
 
 
+    close_connection(clientfd);
 
     return 0;
 }

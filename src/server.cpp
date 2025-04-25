@@ -1,10 +1,18 @@
 #include <cstdlib>
 #include <iostream>
-#include "common/check_os.h"
-#include "common/socket_functions.h"
+#include <thread>
+#include <vector>
+#include <map>
+#include "check_os.h"
+#include "socket_functions.h"
+#include "client_info.h"
+
+
 
 
 int main(int argc, char *argv[]) {
+    std::vector<std::thread> client_threads;
+    std::map<int, ClientInfo> clients;
     if (argc < 3) {
         std::cerr << "Please provide address and port for server" << std::endl;
         return -1;
@@ -36,7 +44,7 @@ int main(int argc, char *argv[]) {
     while(true) {
         std::cout << "Wait connectoin" << std::endl;
         socket_t new_client_cocket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
-        std::cout << "Connection accepted!" << std::endl;
+        client_threads.emplace_back(new_client_cocket);
         number_of_connectinos += 1;
 
         std::cout << "Conected clients: " << number_of_connectinos << std::endl;
@@ -47,6 +55,7 @@ int main(int argc, char *argv[]) {
 
             if (message_length < 0) {
                 std::cout << "Client dissconected: " << std::endl;
+                number_of_connectinos -= 1;
                 client_connected = false;
                 break;
             }
@@ -58,12 +67,6 @@ int main(int argc, char *argv[]) {
             std::cout << message << std::endl;
         }
 
-
-
-
     }
-
-    close_connection(serverfd);
-
     return 0;
 }

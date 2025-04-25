@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include "common/check_os.h"
-#include "common/socket_functions.h"
+#include "check_os.h"
+#include "socket_functions.h"
 
 int main(int argc, char *argv[]) {
 

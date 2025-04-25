@@ -1,5 +1,5 @@
-#include "common/socket_functions.h"
-#include "common/check_os.h"
+#include "socket_functions.h"
+#include "check_os.h"
 #include <string>
 #include <sys/socket.h>
 

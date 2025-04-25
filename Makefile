@@ -23,7 +23,7 @@ $(OBJECTS)/%.o: $(SRC)/utils/%.cpp
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
 # link
-client: $(OBJECTS)/client.o $(OBJECTS)/socket_functions.o
+client: $(OBJECTS)/client.o $(OBJECTS)/socket_functions.o $(OBJECTS)/client_info.o
 	@echo "🔧 Building client..."
 	$(CXX) $(CXXFLAGS) $^ -o $(BIN)/client
 

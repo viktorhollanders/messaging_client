@@ -1,5 +1,6 @@
 #include "socket_functions.h"
 #include "check_os.h"
+#include "client_info.h"
 #include <string>
 #include <sys/socket.h>
 
@@ -118,8 +119,37 @@ socket_t accept_connection(socket_t socketfd, socket_address_t *client_addr, add
     return client_socket;
 }
 
-void handle_client(socket_t socketfd, std::map<int, ClientInfo> &clients) {
+// A function that handles connecting sockets
+// Takes ina new_client_socket and a map of
+// socket_t and a ClientInfo class
+void handle_client(socket_t client_socket, std::map<socket_t, ClientInfo> clients, int &number_of_connectinos) {
+    if (clients.find(client_socket) == clients.end()) {
+        std::string username;
+        int name_length = receive_message_size(client_socket);
+        receive_message(client_socket, username, name_length);
+        clients.emplace(client_socket, username);
+    } else {
+        int message_length = receive_message_size(client_socket);
 
+        if (message_length < 0) {
+            std::cout << "Client dissconected: " << std::endl;
+            number_of_connectinos -= 1;
+            return;
+        }
+
+        std::string message;
+        receive_message(client_socket, message, message_length);
+       for(const auto& pair : clients) {
+           socket_t cur_socket = pair.first;
+           const ClientInfo& curr_client_info = pair.second;
+
+           if (cur_socket == client_socket) {
+               continue;
+           }
+
+           send_message(cur_socket, message);
+       }
+    }
 };
 
 // client

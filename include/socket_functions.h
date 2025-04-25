@@ -23,7 +23,7 @@ int receive_message(socket_t socketfd, std::string& message, int message_lenght)
 int bind_socket(socket_t socketfd, const socket_address_t *address, address_size_t socket_len);
 int listen_for_connection(socket_t socketfd);
 socket_t accept_connection(socket_t socketfd, socket_address_t *client_addr, address_size_t *address_len);
-void handle_client(socket_t socketfd, std::map<int, ClientInfo> &clients);
+void handle_client(socket_t socketfd, std::map<socket_t, ClientInfo> &clients);
 
 // client
 int connect_to_server(socket_t socketfd, const socket_address_t *address, address_size_t socket_len);

@@ -8,11 +8,9 @@
 #include "client_info.h"
 
 
-
-
 int main(int argc, char *argv[]) {
     std::vector<std::thread> client_threads;
-    std::map<int, ClientInfo> clients;
+    std::map<socket_t, ClientInfo> clients;
     if (argc < 3) {
         std::cerr << "Please provide address and port for server" << std::endl;
         return -1;
@@ -47,15 +45,13 @@ int main(int argc, char *argv[]) {
         number_of_connectinos += 1;
 
         std::cout << "Conected clients: " << number_of_connectinos << std::endl;
-        bool client_connected = true;
 
-        while(client_connected) {
+        while(true) {
             int message_length = receive_message_size(new_client_cocket);
 
             if (message_length < 0) {
                 std::cout << "Client dissconected: " << std::endl;
                 number_of_connectinos -= 1;
-                client_connected = false;
                 break;
             }
 

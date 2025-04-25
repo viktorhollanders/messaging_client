@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     std::getline(std::cin, message);
 
     while(message != "quit") {
-        int response_code = send_message_size(clientfd, message.length());
+        send_message_size(clientfd, message.length());
         int bytes_sent = send_message(clientfd, message);
         std::cout << "Bytes sent: " << bytes_sent << std::endl;
 

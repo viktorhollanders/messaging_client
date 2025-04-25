@@ -31,22 +31,39 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Server listening on: " << ip << " port: " << port  << std::endl;
 
+    int number_of_connectinos = 0;
+
     while(true) {
         std::cout << "Wait connectoin" << std::endl;
         socket_t new_client_cocket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
         std::cout << "Connection accepted!" << std::endl;
+        number_of_connectinos += 1;
+
+        std::cout << "Conected clients: " << number_of_connectinos << std::endl;
+        bool client_connected = true;
+
+        while(client_connected) {
+            int message_length = receive_message_size(new_client_cocket);
+
+            if (message_length < 0) {
+                std::cout << "Client dissconected: " << std::endl;
+                client_connected = false;
+                break;
+            }
 
 
-        int message_length = receive_message_size(new_client_cocket);
-        std::string message;
+            std::string message;
+            receive_message(new_client_cocket, message, message_length);
 
-        std::cout << "Message lenght:" << message_length << std::endl;
+            std::cout << message << std::endl;
+        }
 
-        int respons_code = receive_message(new_client_cocket, message, message_length);
-        std::cout << "Response code: " << respons_code << std::endl;
 
-        std::cout << message << std::endl;
+
+
     }
+
+    close_connection(serverfd);
 
     return 0;
 }

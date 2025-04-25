@@ -1,5 +1,6 @@
 #include "common/socket_functions.h"
 #include "common/check_os.h"
+#include <string>
 #include <sys/socket.h>
 
 
@@ -44,23 +45,34 @@ int receive_message_size(socket_t socketfd) {
     if (bytes_recived != sizeof(size_net_order)) {
         return -1;
     }
-
     return ntohl(size_net_order);
 };
 
 // Sends the message
-int send_message(socket_t socketfd, std::vector<char> message) {
-    return send(socketfd, message.data(), message.size(), 0);
+int send_message(socket_t socketfd, std::string message) {
+    int total_sent = 0;
+    int bytes_remaining = message.length();
+
+    while(total_sent < message.length()) {
+        int bytes_sent = send(socketfd, message.data(), bytes_remaining, 0);
+        if (bytes_sent == -1) {
+            return -1;
+        }
+
+        total_sent += bytes_sent;
+        bytes_remaining -= bytes_sent;
+    }
+
+    return total_sent;
 };
 
 // Recieves the message
 // Need message size that is obtained by receive_message_size()
 //  and use that the third argument in receive_message
-int receive_message(socket_t socketfd, std::vector<char>& message, int message_size) {
-    message.resize(message_size);
-
-    int recived_code = recv(socketfd, message.data(), message_size, 0);
-    return recived_code;
+int receive_message(socket_t socketfd, std::string& message, int message_lenght) {
+    message.resize(message_lenght);
+    int result = recv(socketfd, &message[0], message_lenght, 0);
+    return result;
 };
 
 // Closes a conection

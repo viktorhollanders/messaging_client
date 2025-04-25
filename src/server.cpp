@@ -23,29 +23,30 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-
-
     if (listen_for_connection(serverfd)) {
         std::cout << "Connection failed" << std::endl;
         close_connection(serverfd);
         return -1;
     }
 
-
     std::cout << "Server listening on: " << ip << " port: " << port  << std::endl;
-    socket_t server_socket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
 
     while(true) {
-        if (server_socket < 0) {
-        std::cout << "Return error to client" << "\n";
+        std::cout << "Wait connectoin" << std::endl;
+        socket_t new_client_cocket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
+        std::cout << "Connection accepted!" << std::endl;
 
-        } else {
 
-        std::cout << "Acepting conections " << "\n";
-        }
+        int message_length = receive_message_size(new_client_cocket);
+        std::string message;
 
+        std::cout << "Message lenght:" << message_length << std::endl;
+
+        int respons_code = receive_message(new_client_cocket, message, message_length);
+        std::cout << "Response code: " << respons_code << std::endl;
+
+        std::cout << message << std::endl;
     }
-
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <string>
 #include "common/check_os.h"
 #include "common/socket_functions.h"
 
@@ -23,9 +24,15 @@ int main(int argc, char *argv[]) {
 
     std::string message;
     std::cout << "Enter your message: ";
+    std::getline(std::cin, message);
 
     while(message != "quit") {
+        int response_code = send_message_size(clientfd, message.length());
+        int bytes_sent = send_message(clientfd, message);
+        std::cout << "Bytes sent: " << bytes_sent << std::endl;
 
+        std::cout << "Enter your message: ";
+        std::getline(std::cin, message);
     }
 
     close_connection(clientfd);

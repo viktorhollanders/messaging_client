@@ -16,10 +16,19 @@ int main(int argc, char *argv[]) {
     socket_address_in_t address = create_socket_address(port, ip);
     socket_t serverfd = create_socket((socket_address_t *) &address);
     address_size_t addSize =  sizeof(address);
-    bind_socket(serverfd, (socket_address_t *) &address, addSize);
 
-    if (!listen_for_connection(serverfd)) {
-        std::cout << "connection failed" << std::endl;
+    if (bind_socket(serverfd, (socket_address_t *) &address, addSize)) {
+        std::cout << "Bind failed" << std::endl;
+        close_connection(serverfd);
+        return -1;
+    }
+
+
+
+    if (listen_for_connection(serverfd)) {
+        std::cout << "Connection failed" << std::endl;
+        close_connection(serverfd);
+        return -1;
     }
 
 

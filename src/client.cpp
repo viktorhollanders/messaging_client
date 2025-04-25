@@ -15,7 +15,11 @@ int main(int argc, char *argv[]) {
     socket_t clientfd = create_socket((socket_address_t *) &address);
     address_size_t addSize =  sizeof(address);
 
-    connect_to_server(clientfd, (socket_address_t *) &address, addSize);
+    if (connect_to_server(clientfd, (socket_address_t *) &address, addSize)) {
+        std::cout << "Connection failed" << std::endl;
+        close_connection(clientfd);
+        return -1;
+    }
 
     std::string message;
     std::cout << "Enter your message: ";
@@ -23,7 +27,6 @@ int main(int argc, char *argv[]) {
     while(message != "quit") {
 
     }
-
 
     close_connection(clientfd);
 

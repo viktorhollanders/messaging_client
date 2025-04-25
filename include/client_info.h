@@ -1,3 +1,6 @@
+#ifndef CLIENT_INFO_H
+#define CLIENT_INFO_H
+
 #include <ctime>
 #include <string>
 
@@ -16,3 +19,5 @@ class ClientInfo {
     void set_connection_timestamp(time_t new_connection_timestamp);
     time_t get_connection_timestamp();
 };
+
+#endif

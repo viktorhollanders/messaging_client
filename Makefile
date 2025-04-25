@@ -18,7 +18,7 @@ $(OBJECTS)/%.o: $(SRC)/%.cpp
 	@echo "Compiling $< ..."
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
-$(OBJECTS)/%.o: $(SRC)/common/%.cpp
+$(OBJECTS)/%.o: $(SRC)/utils/%.cpp
 	@echo "Compiling $< ..."
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
@@ -27,7 +27,7 @@ client: $(OBJECTS)/client.o $(OBJECTS)/socket_functions.o
 	@echo "🔧 Building client..."
 	$(CXX) $(CXXFLAGS) $^ -o $(BIN)/client
 
-server: $(OBJECTS)/server.o $(OBJECTS)/socket_functions.o
+server: $(OBJECTS)/server.o $(OBJECTS)/socket_functions.o $(OBJECTS)/client_info.o
 	@echo "🔧 Building server..."
 	$(CXX) $(CXXFLAGS) $^ -o $(BIN)/server
 

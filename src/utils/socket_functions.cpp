@@ -117,6 +117,11 @@ socket_t accept_connection(socket_t socketfd, socket_address_t *client_addr, add
     }
     return client_socket;
 }
+
+void handle_client(socket_t socketfd, std::map<int, ClientInfo> &clients) {
+
+};
+
 // client
 
 // Connects to a server

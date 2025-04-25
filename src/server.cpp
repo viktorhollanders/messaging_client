@@ -44,7 +44,6 @@ int main(int argc, char *argv[]) {
     while(true) {
         std::cout << "Wait connectoin" << std::endl;
         socket_t new_client_cocket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
-        client_threads.emplace_back(new_client_cocket);
         number_of_connectinos += 1;
 
         std::cout << "Conected clients: " << number_of_connectinos << std::endl;

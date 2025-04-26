@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <functional>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -37,30 +38,17 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Server listening on: " << ip << " port: " << port  << std::endl;
 
+    std::mutex connection_mutex;
     int number_of_connectinos = 0;
+    std::cout << "Conected clients: " << number_of_connectinos << std::endl;
 
     while(true) {
         std::cout << "Wait connectoin" << std::endl;
-        socket_t new_client_cocket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
-        number_of_connectinos += 1;
-
+        socket_t new_client_socket = accept_connection(serverfd, (socket_address_t *) &address, &addSize);
+        // Add a thread
+        client_threads.emplace_back(std::thread(handle_client, new_client_socket, std::ref(clients), std::ref(number_of_connectinos), std::ref(connection_mutex)));
+        std::lock_guard<std::mutex> lock(connection_mutex);
         std::cout << "Conected clients: " << number_of_connectinos << std::endl;
-
-        while(true) {
-            int message_length = receive_message_size(new_client_cocket);
-
-            if (message_length < 0) {
-                std::cout << "Client dissconected: " << std::endl;
-                number_of_connectinos -= 1;
-                break;
-            }
-
-
-            std::string message;
-            receive_message(new_client_cocket, message, message_length);
-
-            std::cout << message << std::endl;
-        }
 
     }
     return 0;

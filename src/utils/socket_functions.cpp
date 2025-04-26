@@ -2,6 +2,8 @@
 #include "check_os.h"
 #include "client_info.h"
 #include <string>
+#include <map>
+#include <mutex>
 #include <sys/socket.h>
 
 
@@ -122,33 +124,37 @@ socket_t accept_connection(socket_t socketfd, socket_address_t *client_addr, add
 // A function that handles connecting sockets
 // Takes ina new_client_socket and a map of
 // socket_t and a ClientInfo class
-void handle_client(socket_t client_socket, std::map<socket_t, ClientInfo> clients, int &number_of_connectinos) {
+void handle_client(socket_t client_socket, std::map<socket_t, ClientInfo>& clients, int& number_of_connectinos, std::mutex& connection_mutex) {
     if (clients.find(client_socket) == clients.end()) {
         std::string username;
         int name_length = receive_message_size(client_socket);
         receive_message(client_socket, username, name_length);
         clients.emplace(client_socket, username);
+        std::lock_guard<std::mutex> lock(connection_mutex);
+        number_of_connectinos += 1;
     } else {
         int message_length = receive_message_size(client_socket);
 
         if (message_length < 0) {
             std::cout << "Client dissconected: " << std::endl;
+            std::lock_guard<std::mutex> lock(connection_mutex);
             number_of_connectinos -= 1;
             return;
+        } else {
+            std::string message;
+            receive_message(client_socket, message, message_length);
+            for(const auto& pair : clients) {
+               socket_t cur_socket = pair.first;
+
+               // std::string message_to_send =
+               if (cur_socket == client_socket) {
+                   continue;
+               }
+
+               send_message(cur_socket, message);
+            }
+            std::cout << message << std::endl;
         }
-
-        std::string message;
-        receive_message(client_socket, message, message_length);
-       for(const auto& pair : clients) {
-           socket_t cur_socket = pair.first;
-           const ClientInfo& curr_client_info = pair.second;
-
-           if (cur_socket == client_socket) {
-               continue;
-           }
-
-           send_message(cur_socket, message);
-       }
     }
 };
 

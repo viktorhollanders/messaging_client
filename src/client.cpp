@@ -22,6 +22,15 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
+    std::string username;
+    std::cout << "Enter your username: ";
+    std::getline(std::cin, username);
+    if (username.length() == 0) {
+        username = "User";
+    };
+    send_message_size(clientfd, username.length());
+    send_message(clientfd, username);
+
     std::string message;
     std::cout << "Enter your message: ";
     std::getline(std::cin, message);

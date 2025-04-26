@@ -1,8 +1,38 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <thread>
 #include "check_os.h"
 #include "socket_functions.h"
+
+void client_send(socket_t &clientfd) {
+    std::string message;
+    std::cout << "Enter your message: ";
+    std::getline(std::cin, message);
+
+    while(message != "quit") {
+        send_message_size(clientfd, message.length());
+        send_message(clientfd, message);
+
+        std::cout << "Enter your message: ";
+        std::getline(std::cin, message);
+    }
+}
+
+void client_receive(socket_t &clientfd) {
+    while(true) {
+        int message_length = receive_message_size(clientfd);
+
+        if (message_length < 0) {
+            break;
+        }
+
+        std::string message;
+        receive_message(clientfd, message, message_length);
+        std::cout << message << std::endl;
+    }
+
+}
 
 int main(int argc, char *argv[]) {
 
@@ -31,18 +61,10 @@ int main(int argc, char *argv[]) {
     send_message_size(clientfd, username.length());
     send_message(clientfd, username);
 
-    std::string message;
-    std::cout << "Enter your message: ";
-    std::getline(std::cin, message);
+    std::thread send_thread(client_send, std::ref(clientfd));
+    std::thread receive_thread(client_receive, std::ref(clientfd));
+    send_thread.join();
 
-    while(message != "quit") {
-        send_message_size(clientfd, message.length());
-        int bytes_sent = send_message(clientfd, message);
-        std::cout << "Bytes sent: " << bytes_sent << std::endl;
-
-        std::cout << "Enter your message: ";
-        std::getline(std::cin, message);
-    }
 
     close_connection(clientfd);
 

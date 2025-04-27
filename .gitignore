@@ -36,3 +36,7 @@
 
 # cashe
 **/.cache/
+
+# bin and obj dir
+/bin
+/obj

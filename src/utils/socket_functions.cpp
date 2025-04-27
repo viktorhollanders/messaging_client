@@ -1,7 +1,7 @@
-#include "socket_functions.h"
-#include "check_os.h"
 #include <string>
 #include <sys/socket.h>
+#include "socket_functions.h"
+#include "check_os.h"
 
 
 // server and client

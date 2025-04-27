@@ -33,3 +33,6 @@
 
 # compiler_commands
 compile_commands.json
+
+# cashe
+**/.cache/

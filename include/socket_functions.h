@@ -1,8 +1,8 @@
 #ifndef SOCKET_FUNCTIONS_H
 #define SOCKET_FUNCTIONS_H
 
-#include "check_os.h"
 #include <string>
+#include "check_os.h"
 
 
 // server and client

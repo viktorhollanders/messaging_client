@@ -3,6 +3,7 @@
 #include <thread>
 #include <vector>
 #include <map>
+#include <mutex>
 #include "check_os.h"
 #include "socket_functions.h"
 #include "client_info.h"

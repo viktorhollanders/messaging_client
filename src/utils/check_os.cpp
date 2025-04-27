@@ -1,4 +1,4 @@
-#include "common/check_os.h"
+#include "check_os.h"
 
 bool check_os(){
     #ifdef ON_WINDOWS

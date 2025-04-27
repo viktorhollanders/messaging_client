@@ -37,6 +37,8 @@
 # cashe
 **/.cache/
 
+.DS_Store
+
 # bin and obj dir
 /bin
 /obj

@@ -24,7 +24,6 @@ To build the app run:
   make
 ```
 
-This compiles the client and the server.
 To start a server:
 ```sh
 ./bin/server [address] [port]

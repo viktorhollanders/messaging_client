@@ -7,14 +7,12 @@
 
 void client_send(socket_t &clientfd) {
     std::string message;
-    // std::cout << "Enter your message: ";
     std::getline(std::cin, message);
 
     while(message != "quit") {
         send_message_size(clientfd, message.length());
         send_message(clientfd, message);
 
-        // std::cout << "Enter your message: ";
         std::getline(std::cin, message);
     }
 }

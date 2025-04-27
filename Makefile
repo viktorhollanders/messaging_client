@@ -4,10 +4,11 @@ CXXDEBUGFLAGS = -ggdb -fsanitize=address
 
 SRC := src
 INCLUDE := include
-LIB     := lib
 OBJECTS := obj
 BIN     := bin
 EXECUTABLE := $(BIN)/main
+
+$(shell mkdir -p $(OBJECTS) $(BIN))
 
 .PHONY : all client server clean
 

@@ -26,16 +26,26 @@ void disconect_client(socket_t client_socket, std::map<socket_t, ClientInfo>& cl
     return;
 }
 
-void brodcast_message(socket_t client_socket, std::string message, std::map<socket_t, ClientInfo>& clients) {
-    for(const auto& pair : clients) {
-        socket_t cur_socket = pair.first;
+void brodcast_message(socket_t client_socket, const std::string message, std::map<socket_t, ClientInfo>& clients, std::mutex& connection_mutex) {
 
-        // std::string message_to_send =
-        if (cur_socket == client_socket) {
-            continue;
+    std::string username;
+
+    {
+        std::lock_guard<std::mutex> lock(connection_mutex);
+        username = clients.at(client_socket).get_username();
+    }
+
+    std::string formated_message = username + ": " + message;
+
+    {
+        std::lock_guard<std::mutex> lock(connection_mutex);
+        for(const auto& pair : clients) {
+
+            if (pair.first != client_socket) {
+                send_message_size(pair.first, formated_message.length());
+                send_message(pair.first, formated_message);
+            }
         }
-
-        send_message(cur_socket, message);
     }
     std::cout << "Message brodcasted: " << message << std::endl;
 }
@@ -51,7 +61,7 @@ void handle_client_messages(socket_t client_socket, std::map<socket_t, ClientInf
 
         std::string message;
         receive_message(client_socket, message, message_length);
-        brodcast_message(client_socket, message, clients);
+        brodcast_message(client_socket, message, clients, std::ref(connection_mutex));
     }
 };
 

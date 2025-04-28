@@ -34,7 +34,7 @@ To start a client:
 ./bin/client [address] [port]
 ```
 
-To quit a client simply type `quit`. \\
+To quit a client simply type `quit`. \
 The client and server can also be compiled separately:
 ```sh
   make server
